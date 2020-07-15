@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import note.wic.FinalProject.R;
 import note.wic.FinalProject.activites.home.HomeFragment;
+import note.wic.FinalProject.activites.note.NoteListFragment;
 
 public class DashBoardActivity extends AppCompatActivity {
 
@@ -54,7 +55,9 @@ public class DashBoardActivity extends AppCompatActivity {
                 Log.e(TAG, "onNavigationItemSelected() called with: " + "item id = [" + item.getItemId() + "]");
                 int menuId = item.getItemId();
                 if (menuId == ALL_NOTES_MENU_ID){
-
+                    Fragment fragment = new NoteListFragment();
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit();
                 }else if (menuId == EDIT_FOLDERS_MENU_ID){
 
                 }else if (menuId == SAVE_DATABASE_MENU_ID){
