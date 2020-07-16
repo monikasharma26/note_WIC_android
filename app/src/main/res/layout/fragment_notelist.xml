@@ -7,6 +7,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:theme="@style/ToolbarTheme"
+            app:title="Notes"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
         <RelativeLayout
             android:id="@+id/rel_ll"
             android:layout_width="match_parent"
