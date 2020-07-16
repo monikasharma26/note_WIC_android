@@ -1,51 +1,81 @@
 package note.wic.FinalProject.activites.home;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import note.wic.FinalProject.R;
+import note.wic.FinalProject.activites.dashboard.DashBoardActivity;
 
 
 public class HomeFragment extends Fragment {
 
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.img1)
+    ImageView img1;
+    @BindView(R.id.textdateandtime)
+    TextView textdateandtime;
+    @BindView(R.id.txt_noe_ed)
+    TextView txtNoeEd;
+    @BindView(R.id.alert_img)
+    ImageView alertImg;
+    @BindView(R.id.txt_nov_ed)
+    TextView txtNovEd;
+    @BindView(R.id.ll_dashtotal)
+    LinearLayout llDashtotal;
 
 
-
-
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        return fragment;
-    }
-
+    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View layout = inflater.inflate(R.layout.fragment_home, container, false);
-        init(layout);
+         View layout = inflater.inflate(R.layout.fragment_home, container, false);
+        ButterKnife.bind(this,layout);
         return layout;
 
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        AppCompatActivity activity = (AppCompatActivity) getActivity();
-        ActionBar actionBar = activity.getSupportActionBar();
-        if(actionBar!=null) {
-            actionBar.setTitle("Home");
-        }
+    @Override public void onActivityCreated(@Nullable Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+
+        mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener(){
+            @Override public void onClick(View v){
+                ((DashBoardActivity) getActivity()).mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+     /*   StaggeredGridLayoutManager slm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        slm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        mRecyclerView.setLayoutManager(slm);
+        adapter = new Adapter(zeroNotesView, folder);
+        mRecyclerView.setAdapter(adapter);
+        adapter.loadFromDatabase();*/
+    }
+
+    @Override public void onStart(){
+        super.onStart();
 
     }
-    private void init(View view) {
 
+    @Override public void onStop(){
+        super.onStop();
 
     }
+
+
 }
