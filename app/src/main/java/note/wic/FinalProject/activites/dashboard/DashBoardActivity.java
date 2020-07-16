@@ -9,7 +9,9 @@ import android.view.SubMenu;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -36,6 +38,8 @@ public class DashBoardActivity extends AppCompatActivity {
     NavigationView mNavigationView;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle toggle;
 
 
     @Override
@@ -43,6 +47,9 @@ public class DashBoardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
         ButterKnife.bind(this);
+        toggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
         mDrawerLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){
             @Override public void onGlobalLayout(){
                 mDrawerLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
