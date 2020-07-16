@@ -12,13 +12,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <!--Dash-->
             <RelativeLayout
                 android:id="@+id/dash_parent_rl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginTop="5dp">
 
                 <note.wic.FinalProject.utils.ShadowLayout
@@ -92,20 +91,21 @@
                             android:visibility="visible" />
                     </RelativeLayout>
 
-                </note.wic.FinalProject.utils.ShadowLayout>>
+                </note.wic.FinalProject.utils.ShadowLayout>
+                <SearchView
+                    android:id="@+id/etSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="120dp"
+                    android:visibility="visible"
+                    android:layout_alignLeft="@+id/dash_parent_rl"
+                    tools:ignore="NotSibling" />
 
             </RelativeLayout>
 
 
-            <SearchView
-                android:id="@+id/etSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:visibility="visible"
-                android:layout_below="@id/dash_parent_rl"
-                />
+
 
 
             <!--Recycler for list-->
@@ -113,7 +113,7 @@
                 android:id="@+id/categories_rv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/etSearch"
+                android:layout_below="@id/dash_parent_rl"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="5dp"
@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/no_event"
-                android:layout_below="@id/etSearch"
+                android:layout_below="@id/dash_parent_rl"
                 android:layout_marginTop="70dp"
                 android:layout_centerHorizontal="true"/>
 
