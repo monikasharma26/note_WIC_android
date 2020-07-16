@@ -8,7 +8,6 @@ import note.wic.FinalProject.model.Folder;
 import note.wic.FinalProject.model.Folder_Table;
 
 public class FoldersDAO {
-
     public static List<Folder> getLatestFolders(){
         return SQLite.select().from(Folder.class).orderBy(Folder_Table.createdAt, false).queryList();
     }

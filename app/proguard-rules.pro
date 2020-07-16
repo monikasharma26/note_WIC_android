@@ -11,7 +11,22 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn com.google.android.gms.*
+-ignorewarnings
 
+#DBFlow
+-keep class * extends com.raizlabs.android.dbflow.config.DatabaseHolder { *; }
+
+
+#Eventbus
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
+#PrettyTime
+-keep class org.ocpsoft.prettytime.i18n.**
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
 #-keepattributes SourceFile,LineNumberTable
