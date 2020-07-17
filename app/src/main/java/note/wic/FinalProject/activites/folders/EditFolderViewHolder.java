@@ -93,7 +93,7 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 	@Override
     public void close(){
 		Utils.hideSoftKeyboard(itemView);
-		leftButton.setImageResource(R.drawable.editfolder);
+		leftButton.setImageResource(R.drawable.folder);
 		folderName.setText(folder.getName());
 		folderName.clearFocus();
 		rightButton.setImageResource(R.drawable.ic_mode_edit_white_24dp);
