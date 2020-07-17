@@ -8,6 +8,8 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import note.wic.FinalProject.database.AppDatabase;
 
+
+
 @Table(database = AppDatabase.class, allFields = true)
 public class FolderNoteRelation extends BaseModel {
     private static final String TAG = "FolderNoteRelation";
