@@ -3,67 +3,46 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <include layout="@layout/activity_note_scrolling_content"/>
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/md_white_1000"
-        android:textColorPrimary="@color/md_blue_grey_700"
-        app:theme="@style/ToolbarTheme"
-        app:title=" "
-        app:titleTextAppearance="@style/Toolbar.TitleText"
-        />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:textColorPrimary="@color/white"
+            app:theme="@style/AppTheme"
+            app:title=" "
+            app:titleTextAppearance="@style/Toolbar.TitleText" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appBar"
         android:layout_marginBottom="50dp">
-
-        <EditText
-            android:id="@+id/txtNoteTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Enter Note Title"
-            android:textColor="@color/black" />
-
-        <EditText
-            android:id="@+id/txtNoteContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/txtNoteTitle"
-            android:layout_marginBottom="30dp"
-            android:hint="Enter Note Content"
-            android:inputType="textMultiLine"
-            android:textColor="@color/black" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/img_card"
-            android:layout_width="350dp"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txtNoteContent"
+            android:layout_above="@id/save_sl"
             android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginLeft="5dp"
             android:elevation="40dp"
+            android:visibility="gone"
             card_view:cardBackgroundColor="@color/primaryText"
-            card_view:cardCornerRadius="10dp"
-            tools:visibility="gone">
+            card_view:cardCornerRadius="10dp">
 
 
             <LinearLayout
@@ -82,7 +61,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/ic_menu_gallery"></ImageView>
+                        android:src="@drawable/ic_menu_gallery">
+
+                    </ImageView>
 
                     <ImageView
                         android:id="@+id/cross_image"
@@ -91,7 +72,9 @@
                         android:layout_gravity="end"
                         android:padding="5dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/cross"></ImageView>
+                        android:src="@drawable/cross">
+
+                    </ImageView>
 
                 </FrameLayout>
 
@@ -105,16 +88,14 @@
             android:id="@+id/music_card"
             android:layout_width="150dp"
             android:layout_height="130dp"
-            android:layout_below="@id/img_card"
-            android:layout_gravity="left"
-            android:layout_marginLeft="22dp"
-            android:layout_marginTop="20dp"
+
+            android:layout_above="@id/save_sl"
+            android:layout_marginBottom="60dp"
+            android:layout_toLeftOf="@id/btn"
             android:elevation="40dp"
-            android:visibility="visible"
-            app:cardBackgroundColor="@color/white"
-            card_view:cardBackgroundColor="@color/grey"
-            card_view:cardCornerRadius="10dp"
-            tools:visibility="gone">
+            android:visibility="gone"
+            card_view:cardBackgroundColor="@color/white"
+            card_view:cardCornerRadius="10dp">
 
 
             <LinearLayout
@@ -132,7 +113,9 @@
                         android:layout_width="150dp"
                         android:layout_height="100dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/music_cardd"></ImageView>
+                        android:src="@drawable/music_cardd">
+
+                    </ImageView>
 
                     <ImageView
                         android:id="@+id/cross_music"
@@ -140,7 +123,9 @@
                         android:layout_height="30dp"
                         android:layout_gravity="end"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/cross"></ImageView>
+                        android:src="@drawable/cross">
+
+                    </ImageView>
 
 
                     <TextView
@@ -167,18 +152,17 @@
 
         </androidx.cardview.widget.CardView>
 
-
         <note.wic.FinalProject.utils.ShadowLayout
             android:id="@+id/save_sl"
             android:layout_width="190dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginBottom="10dp"
             android:gravity="center"
             app:sl_shadow_angle="90"
             app:sl_shadow_color="@color/month_view_shadow"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
             app:sl_shadow_distance="5dp"
             app:sl_shadow_radius="5dp">
 
@@ -206,30 +190,16 @@
             android:paddingLeft="50dp"
             android:paddingRight="50dp"
             android:text="Save"
-            android:textColor="#fff"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:textColor="#fff" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAnimals"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="60dp"
-
-            />
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <com.github.clans.fab.FloatingActionMenu
+        <com.github.clans.fab.FloatingActionMenu
                 android:id="@+id/btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_alignRight="@+id/saveNote"
                 android:layout_alignParentBottom="true"
                 app:menu_colorNormal="@color/md_blue_800">
 
@@ -275,13 +245,14 @@
 
 
         </RelativeLayout>
-    </RelativeLayout>
+
 
 
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/ss"
         android:layout_gravity="bottom"
         android:background="@color/white">
 
@@ -325,5 +296,12 @@
             android:tint="@color/colorPrimary" />
     </FrameLayout>
 
+    <note.wic.FinalProject.view.RichEditWidgetView
+        android:id="@+id/rich_edit_widget"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/background_shadow"
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
