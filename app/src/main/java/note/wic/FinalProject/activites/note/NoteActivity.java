@@ -255,7 +255,7 @@ public class NoteActivity extends AppCompatActivity {
                 SQLite.delete().from(Note.class).where(Note_Table.id.is(note.getId())).execute();
                 return;
             }
-     
+
         }
     }
 
