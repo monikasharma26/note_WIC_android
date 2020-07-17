@@ -8,6 +8,7 @@ import note.wic.FinalProject.model.Folder;
 import note.wic.FinalProject.model.Note;
 import note.wic.FinalProject.model.Note_Table;
 
+
 public class NotesDAO {
 
     public static List<Note> getLatestNotes(Folder folder){
