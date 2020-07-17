@@ -53,6 +53,7 @@ public class NoteAdapter extends RecyclerView.Adapter{
     @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position){
         if (holder.itemView instanceof NoteCardView){
             NoteCardView noteCardView = (NoteCardView) holder.itemView;
+
             noteCardView.bindModel(notes.get(position));
         }
     }

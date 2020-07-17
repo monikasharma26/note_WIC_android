@@ -255,10 +255,7 @@ public class NoteActivity extends AppCompatActivity {
                 SQLite.delete().from(Note.class).where(Note_Table.id.is(note.getId())).execute();
                 return;
             }
-            note.setSpannedBody(body.getText());
-            note.setTitle(processedTitle);
-            note.save();
-            EventBus.getDefault().postSticky(new NoteEditedEvent(note.getId()));
+     
         }
     }
 
