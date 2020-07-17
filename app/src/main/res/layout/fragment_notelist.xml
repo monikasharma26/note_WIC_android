@@ -23,174 +23,142 @@
             app:titleTextAppearance="@style/Toolbar.TitleText"
             />
     </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/rel_ll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="50dp">
+
+
+        <!--Dash-->
         <RelativeLayout
-            android:id="@+id/rel_ll"
+            android:id="@+id/dash_parent_rl"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
 
-
-            <!--Dash-->
-            <RelativeLayout
-                android:id="@+id/dash_parent_rl"
-                android:layout_width="match_parent"
+            <note.wic.FinalProject.utils.ShadowLayout
+                android:id="@+id/spinner_sl"
+                android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp">
-
-                <note.wic.FinalProject.utils.ShadowLayout
-                    android:id="@+id/spinner_sl"
-                    android:layout_width="140dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    app:sl_shadow_angle="90"
-                    app:sl_shadow_color="@color/share_shadow"
-                    app:sl_shadow_distance="5dp"
-                    app:sl_shadow_radius="5dp">
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                app:sl_shadow_angle="90"
+                app:sl_shadow_color="@color/share_shadow"
+                app:sl_shadow_distance="5dp"
+                app:sl_shadow_radius="5dp">
 
 
-                    <RelativeLayout
-                        android:id="@+id/spinner_parent_rl1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_gravity="center"
-                        android:background="@drawable/custom_month_view_background"
-                        android:padding="7dp">
-
-                        <TextView
-                            android:id="@+id/mdw_view_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableRight="@drawable/drop_down"
-                            android:letterSpacing="0.1"
-                            android:text="MONTH VIEW"
-                            android:textColor="@color/md_white_1000"
-                            android:textSize="12sp" />
-
-                        <ImageView
-                            android:id="@+id/arrow_down_iv0"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="5dp"
-                            android:layout_toRightOf="@id/mdw_view_tv"
-                            android:src="@drawable/drop_down"
-                            android:visibility="gone" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/spinner_parent_rl"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_gravity="center"
-                        android:background="@drawable/custom_month_view_background"
-                        android:padding="7dp"
-                        android:visibility="gone">
-
-                        <Spinner
-                            android:id="@+id/spinner"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:background="@null"
-                            android:visibility="visible" />
-
-                        <ImageView
-                            android:id="@+id/arrow_down_iv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_toRightOf="@id/spinner"
-                            android:src="@drawable/drop_down"
-                            android:visibility="visible" />
-                    </RelativeLayout>
-
-                </note.wic.FinalProject.utils.ShadowLayout>
-                <SearchView
-                    android:id="@+id/etSearch"
+                <RelativeLayout
+                    android:id="@+id/spinner_parent_rl1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="120dp"
-                    android:visibility="visible"
-                    android:layout_alignLeft="@+id/dash_parent_rl"
-                    tools:ignore="NotSibling" />
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_month_view_background"
+                    android:padding="7dp">
 
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/mdw_view_tv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@drawable/drop_down"
+                        android:letterSpacing="0.1"
+                        android:text="MONTH VIEW"
+                        android:textColor="@color/md_white_1000"
+                        android:textSize="12sp" />
 
+                    <ImageView
+                        android:id="@+id/arrow_down_iv0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@id/mdw_view_tv"
+                        android:src="@drawable/drop_down"
+                        android:visibility="gone" />
 
+                </RelativeLayout>
 
-
-
-            <!--Recycler for list-->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/categories_rv"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/dash_parent_rl"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:visibility="visible">
-            </androidx.recyclerview.widget.RecyclerView>
-
-            <ImageView
-                android:id="@+id/no_event_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/no_event"
-                android:layout_below="@id/dash_parent_rl"
-                android:layout_marginTop="70dp"
-                android:layout_centerHorizontal="true"/>
-
-            <TextView
-                android:id="@+id/no_event_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:letterSpacing="0.1"
-                android:layout_below="@id/no_event_iv"
-                android:layout_centerHorizontal="true"
-                android:text="No Notes Available"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="25sp"
-                android:layout_marginTop="10dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/can_add_event_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:letterSpacing="0.1"
-                android:layout_below="@id/no_event_iv"
-                android:layout_marginTop="60dp"
-                android:layout_centerHorizontal="true"
-                android:text="You can add an note using the Add note button below."
-                android:textSize="16sp"/>
-
-
-            <!--Add event-->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
-
-                <ImageView
-                    android:id="@+id/add_event_iv"
+                <RelativeLayout
+                    android:id="@+id/spinner_parent_rl"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_gravity="right"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginRight="11dp"
-                    android:src="@drawable/addb" />
-            </FrameLayout>
+                    android:layout_gravity="center"
+                    android:background="@drawable/custom_month_view_background"
+                    android:padding="7dp"
+                    android:visibility="gone">
 
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:background="@null"
+                        android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/arrow_down_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@id/spinner"
+                        android:src="@drawable/drop_down"
+                        android:visibility="visible" />
+                </RelativeLayout>
+
+            </note.wic.FinalProject.utils.ShadowLayout>
+
+            <SearchView
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/dash_parent_rl"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="120dp"
+                android:visibility="visible"
+                tools:ignore="NotSibling" />
 
         </RelativeLayout>
 
+
+        <!--Recycler for list-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categories_rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/dash_parent_rl"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:visibility="visible">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+
+        <!--Add event-->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <ImageView
+                android:id="@+id/add_event_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:layout_marginRight="11dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/addb" />
+        </FrameLayout>
+
+    </RelativeLayout>
+
+    <include
+        layout="@layout/view_zeronotes"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
