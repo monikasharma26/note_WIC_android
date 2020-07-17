@@ -59,12 +59,7 @@ public class HomeFragment extends Fragment {
                 ((DashBoardActivity) getActivity()).mDrawerLayout.openDrawer(Gravity.LEFT);
             }
         });
-     /*   StaggeredGridLayoutManager slm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        slm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
-        mRecyclerView.setLayoutManager(slm);
-        adapter = new Adapter(zeroNotesView, folder);
-        mRecyclerView.setAdapter(adapter);
-        adapter.loadFromDatabase();*/
+
     }
 
     @Override public void onStart(){
