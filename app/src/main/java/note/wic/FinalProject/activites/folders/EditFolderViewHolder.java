@@ -7,11 +7,13 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -23,6 +25,9 @@ import butterknife.OnClick;
 import note.wic.FinalProject.R;
 import note.wic.FinalProject.events.FolderDeletedEvent;
 import note.wic.FinalProject.model.Folder;
+import note.wic.FinalProject.model.Folder_Table;
+import note.wic.FinalProject.model.Note;
+import note.wic.FinalProject.model.Note_Table;
 import note.wic.FinalProject.utils.Utils;
 
 
@@ -57,14 +62,27 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 				return false;
 			}
 		});
+
+		leftButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int id = v.getId();
+				delete(id);
+
+
+
+			}
+		});
 	}
 
 	@OnClick(R.id.left_button) void clickLeftButton(View view){
 		if (isOpen()){
 			close();
-			delete();
+			delete(view.getId());
 		}
 	}
+
+
 
 	@OnClick(R.id.right_button) void clickRightButton(View view){
 		if (isOpen()){
@@ -110,8 +128,8 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 		folder.save();
 	}
 
-	private void delete(){
-		new AlertDialog.Builder(itemView.getContext(),R.style.DialogTheme)
+	private void delete(int id){
+	/*	new AlertDialog.Builder(itemView.getContext(),R.style.DialogTheme)
 				.setCancelable(true)
 				.setTitle("Delete folder?")
 				.setMessage("Folder '" + folder.getName() + "' will be deleted however notes in this folder will remain safe")
@@ -129,8 +147,38 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 						dialog.dismiss();
 					}
 				})
-				.show();
+				.show();*/
+
+
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(itemView.getContext());
+		alertDialogBuilder.setTitle("Are you Sure to Delete");
+		alertDialogBuilder.setCancelable(true);
+
+		alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				dialogInterface.dismiss();
+			}
+		});
+
+		alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+
+				dialogInterface.dismiss();
+			//	SQLite.delete().from(Folder.class).where(Folder_Table.id.is(id).execute());
+
+				EventBus.getDefault().post(new FolderDeletedEvent(folder));
+
+			}
+		});
+
+
+		AlertDialog mAlertDialog = alertDialogBuilder.create();
+		mAlertDialog.show();
 	}
+
+
 
 	public void setFolder(Folder folder){
 		this.folder = folder;
