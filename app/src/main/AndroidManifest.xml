@@ -9,6 +9,15 @@
     -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".App"
@@ -19,28 +28,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-       
+        <activity android:name=".activites.audio.splash.SplashActivity">
 
-
+        </activity>
+        <activity android:name=".activites.audio.AudioActivity" />
         <activity
             android:name=".activites.note.DrawingActivity"
             android:label="Drawing Activity"
-            android:theme="@style/AppTheme"
-            >
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activites.folders.addFolder.AddToFoldersActivity"
-            android:label="Add Folders"
-            >
-        </activity>
-        <activity android:name=".activites.note.NoteActivity"
-            android:windowSoftInputMode="adjustResize|stateUnchanged">
-        </activity>
+            android:label="Add Folders" />
+        <activity
+            android:name=".activites.note.NoteActivity"
+            android:windowSoftInputMode="adjustResize|stateUnchanged" />
         <activity
             android:name=".activites.folders.EditFoldersActivity"
-            android:label="Edit Folders">
-
-        </activity>
+            android:label="Edit Folders" />
         <activity android:name=".activites.dashboard.DashBoardActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -73,7 +77,7 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
     </application>
 
 </manifest>

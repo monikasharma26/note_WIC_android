@@ -53,7 +53,7 @@ dependencies {
 
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
-
+    implementation 'com.karumi:dexter:6.2.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -78,8 +78,11 @@ dependencies {
     implementation 'com.commonsware.cwac:richedit:0.5.3'
     implementation 'com.nbsp:library:1.09'
     // map
-    implementation 'com.google.android.gms:play-services-maps:16.0.0'
-    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-places:17.0.0'
+    implementation 'com.google.android.libraries.places:places:2.0.0'
+    implementation 'com.google.maps.android:android-maps-utils:0.5'
 
     // button menu
     implementation 'com.github.clans:fab:1.6.4'

@@ -1,6 +1,9 @@
 package note.wic.FinalProject.activites.note;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,16 +18,31 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.commonsware.cwac.richedit.RichEditText;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.greenfrvr.hashtagview.HashtagView;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.DexterError;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.PermissionRequestErrorListener;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,10 +50,12 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import note.wic.FinalProject.MapsActivity;
 import note.wic.FinalProject.R;
 import note.wic.FinalProject.activites.folders.addFolder.AddToFoldersActivityIntentBuilder;
 import note.wic.FinalProject.database.FolderNoteDAO;
@@ -113,6 +133,16 @@ public class NoteActivity extends AppCompatActivity {
     @BindView(R.id.rich_edit_widget)
     RichEditWidgetView richEditWidget;
     private boolean shouldFireDeleteEvent = false;
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private static final float DEFAULT_ZOOM = 15f;
+    private Boolean mLocationPermissionsGranted = false;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+    LatLng recentLatLng = null;
+
+    double latitude;
+    double longitude;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,6 +150,10 @@ public class NoteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_addnote);
         ButterKnife.bind(this);
         NoteActivityIntentBuilder.inject(getIntent(), this);
+        getLocationPermission();
+        getDeviceLocation();
+
+        requestMultiplePermissions();
         setSupportActionBar(mToolbar);
         imgCard.setVisibility(View.INVISIBLE);
         musicCard.setVisibility(View.INVISIBLE);
@@ -138,6 +172,7 @@ public class NoteActivity extends AppCompatActivity {
             note.setCreatedAt(now);
             note.save();
             noteId = note.getId();
+            recentLatLng = new LatLng(note.getLatitude(),note.getLongitude());
         }
         else
         {
@@ -169,6 +204,7 @@ public class NoteActivity extends AppCompatActivity {
                 return item.getName();
             }
         });
+        recentLatLng = new LatLng(note.getLatitude(), note.getLongitude());
         if (note.getDrawingTrimmed() == null)
             drawingImage.setVisibility(View.GONE);
         else {
@@ -177,6 +213,103 @@ public class NoteActivity extends AppCompatActivity {
         }
         createTimeText.setText("Created " + TimeUtils.getHumanReadableTimeDiff(note.getCreatedAt()));
     }
+    private void requestMultiplePermissions() {
+        Dexter.withActivity(this).withPermissions(
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        ).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport report) {
+                // check if all permissions are granted
+                if (report.areAllPermissionsGranted()) {
+                }
+                if (report.isAnyPermissionPermanentlyDenied()) {
+                }
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                token.continuePermissionRequest();
+            }
+        }).withErrorListener(new PermissionRequestErrorListener() {
+            @Override
+            public void onError(DexterError error) {
+            }
+        }).onSameThread()
+                .check();
+    }
+
+    private void getLocationPermission() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionsGranted = true;
+
+
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        permissions,
+                        LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        mLocationPermissionsGranted = false;
+        switch (requestCode) {
+            case LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            mLocationPermissionsGranted = false;
+                            return;
+                        }
+                    }
+                    mLocationPermissionsGranted = true;
+                }
+            }
+        }
+    }
+
+    private void getDeviceLocation() {
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(NoteActivity.this);
+        try {
+            if (mLocationPermissionsGranted) {
+                final Task<Location> location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener<Location>() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Location currentLocation = (Location) task.getResult();
+                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+
+                        } else {
+                            Toast.makeText(NoteActivity.this, "Error in Location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e) {
+
+        }
+    }
+
+    private void moveCamera(LatLng latLng) {
+        latitude = latLng.latitude;
+        longitude = latLng.longitude;
+        recentLatLng = latLng;
+    }
+
 
     @Override
     protected void onStop() {
@@ -259,6 +392,13 @@ public class NoteActivity extends AppCompatActivity {
         }
     }
 
+    public void mapButtonClick(View view) {
+
+        Intent intent = new Intent(NoteActivity.this, MapsActivity.class);
+        intent.putExtra("Latlng", recentLatLng);
+        startActivity(intent);
+    }
+
     @OnClick(R.id.save_tv)
     public void onViewClicked() {
         Log.d("aa","ssd");
@@ -274,6 +414,8 @@ public class NoteActivity extends AppCompatActivity {
             }
             note.setSpannedBody(body.getText());
             note.setTitle(processedTitle);
+            note.setLatitude(latitude);
+            note.setLongitude(longitude);
             note.save();
             EventBus.getDefault().postSticky(new NoteEditedEvent(note.getId()));
 
