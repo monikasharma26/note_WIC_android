@@ -292,7 +292,7 @@
             android:layout_gravity="right"
             android:background="?selectableItemBackgroundBorderless"
             android:padding="12dp"
-            android:src="@drawable/newgg"
+            android:src="@drawable/finfo"
             android:tint="@color/colorPrimary" />
     </FrameLayout>
 

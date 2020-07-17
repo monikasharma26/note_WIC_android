@@ -32,14 +32,14 @@ public class EditFoldersActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_list_of_folders);
 		EditFoldersActivityIntentBuilder.inject(getIntent(), this);
 		ButterKnife.bind(this);
-		//setSupportActionBar(mToolbar);
-		//mToolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-		/*mToolbar.setNavigationOnClickListener(new View.OnClickListener(){
+		setSupportActionBar(mToolbar);
+		mToolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+		mToolbar.setNavigationOnClickListener(new View.OnClickListener(){
 			@Override
             public void onClick(View v){
 				onBackPressed();
 			}
-		});*/
+		});
 		LinearLayoutManager llm = new LinearLayoutManager(this);
 		llm.setOrientation(RecyclerView.VERTICAL);
 		mRecyclerView.setLayoutManager(llm);

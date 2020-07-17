@@ -5,15 +5,14 @@
 		xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<ImageButton
-			android:id="@+id/left_button"
-			android:layout_width="56dp"
-			android:layout_height="56dp"
-			android:layout_gravity="left|center_vertical"
-			android:background="@color/colorPrimary"
-			android:padding="16dp"
-			android:src="@drawable/ic_add_white_24dp"
-			android:tint="@color/white"
-			/>
+		android:id="@+id/left_button"
+		android:layout_width="56dp"
+		android:layout_height="56dp"
+		android:layout_gravity="left|center_vertical"
+		android:background="@color/white"
+		android:padding="16dp"
+		android:src="@drawable/ic_add_white_24dp"
+		android:tint="@color/colorPrimary" />
 
 	<EditText
 			android:id="@+id/folder_name_text"
