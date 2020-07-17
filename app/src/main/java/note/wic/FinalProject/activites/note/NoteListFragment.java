@@ -1,66 +1,119 @@
 package note.wic.FinalProject.activites.note;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.SearchView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import note.wic.FinalProject.R;
+import note.wic.FinalProject.activites.dashboard.DashBoardActivity;
+import note.wic.FinalProject.model.Folder;
+import note.wic.FinalProject.utils.ShadowLayout;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link NoteListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class NoteListFragment extends Fragment {
     public static final String FOLDER = "FOLDER";
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
-    public NoteListFragment() {
-        // Required empty public constructor
-    }
+    @BindView(R.id.zero_notes_view)
+    View zeroNotesView;
+    NoteAdapter adapter;
+    Folder folder;
+    @BindView(R.id.mdw_view_tv)
+    TextView mdwViewTv;
+    @BindView(R.id.arrow_down_iv0)
+    ImageView arrowDownIv0;
+    @BindView(R.id.spinner_parent_rl1)
+    RelativeLayout spinnerParentRl1;
+    @BindView(R.id.spinner)
+    Spinner spinner;
+    @BindView(R.id.arrow_down_iv)
+    ImageView arrowDownIv;
+    @BindView(R.id.spinner_parent_rl)
+    RelativeLayout spinnerParentRl;
+    @BindView(R.id.spinner_sl)
+    ShadowLayout spinnerSl;
+    @BindView(R.id.etSearch)
+    SearchView etSearch;
+    @BindView(R.id.dash_parent_rl)
+    RelativeLayout dashParentRl;
+    @BindView(R.id.categories_rv)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.add_event_iv)
+    ImageView addEventIv;
+    @BindView(R.id.rel_ll)
+    RelativeLayout relLl;
+    @BindView(R.id.no_event_iv)
+    ImageView noEventIv;
+    @BindView(R.id.no_event_tv)
+    TextView noEventTv;
+    @BindView(R.id.can_add_event_tv)
+    TextView canAddEventTv;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NoteListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static NoteListFragment newInstance(String param1, String param2) {
-        NoteListFragment fragment = new NoteListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Nullable
+    @Override
+    public View onCreateView(
+            LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState
+    ) {
+        View view = inflater.inflate(R.layout.fragment_notelist, container, false);
+        ButterKnife.bind(this, view);
+        folder = getArguments() == null ? null : (Folder) getArguments().getParcelable(NoteListFragment.FOLDER);
+        return view;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (folder != null) mToolbar.setTitle(folder.getName());
+        mToolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ((DashBoardActivity) getActivity()).mDrawerLayout.openDrawer(Gravity.LEFT);
+            }
+        });
+        StaggeredGridLayoutManager slm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        slm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
+        mRecyclerView.setLayoutManager(slm);
+        adapter = new NoteAdapter(zeroNotesView, folder);
+        mRecyclerView.setAdapter(adapter);
+        adapter.loadFromDatabase();
+    }
+
+    @OnClick(R.id.add_event_iv)
+    void clickNewNoteButton() {
+        Intent intent = new NoteActivityIntentBuilder().build(getContext());
+        this.startActivity(intent);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notelist, container, false);
+    public void onStart() {
+        super.onStart();
+        adapter.registerEventBus();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.unregisterEventBus();
     }
 }
