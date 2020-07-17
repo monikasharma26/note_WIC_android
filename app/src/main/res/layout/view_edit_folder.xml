@@ -13,6 +13,7 @@
 		android:background="?selectableItemBackgroundBorderless"
 		android:padding="16dp"
 		android:src="@drawable/finfo"
+		android:tint="@color/colorPrimary"
 
 		/>
 

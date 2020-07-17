@@ -18,18 +18,17 @@ import note.wic.FinalProject.events.FolderCreatedEvent;
 import note.wic.FinalProject.events.FolderDeletedEvent;
 import note.wic.FinalProject.model.Folder;
 
-class Adapter extends RecyclerView.Adapter{
+class Adapter  extends RecyclerView.Adapter{
 	private static final int VIEW_TYPE_NEW_FOLDER = 0;
 	private static final int VIEW_TYPE_EDIT_A_FOLDER = 1;
 
 	List<Folder> folders;
 	OpenCloseable lastOpenedItem;
 
-	@Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+	@Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
 		if (viewType == VIEW_TYPE_NEW_FOLDER){
 			return new NewFolderViewHolder(
-					LayoutInflater.from(parent.getContext()).inflate(R.layout.view_new_folder, parent, false));
+					LayoutInflater.from(parent.getContext()).inflate(R.layout.view_new_folder, parent, false), this);
 		}else if (viewType == VIEW_TYPE_EDIT_A_FOLDER){
 			return new EditFolderViewHolder(
 					LayoutInflater.from(parent.getContext()).inflate(R.layout.view_edit_folder, parent, false), this);
@@ -37,8 +36,7 @@ class Adapter extends RecyclerView.Adapter{
 		return null;
 	}
 
-	@Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position){
+	@Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position){
 		if (holder instanceof EditFolderViewHolder){
 			position--;
 			EditFolderViewHolder editFolderViewHolder = (EditFolderViewHolder) holder;
@@ -46,14 +44,12 @@ class Adapter extends RecyclerView.Adapter{
 		}
 	}
 
-	@Override
-    public int getItemViewType(int position){
+	@Override public int getItemViewType(int position){
 		if (position == 0) return VIEW_TYPE_NEW_FOLDER;
 		else return VIEW_TYPE_EDIT_A_FOLDER;
 	}
 
-	@Override
-    public int getItemCount(){
+	@Override public int getItemCount(){
 		return 1 + (folders == null ? 0 : folders.size());
 	}
 

@@ -95,7 +95,7 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 
 	@Override
     public void open(){
-		leftButton.setImageResource(R.drawable.ic_delete_white_24dp);
+		//leftButton.setImageResource(R.drawable.ic_delete_white_24dp);
 		rightButton.setImageResource(R.drawable.ic_done_white_24dp);
 		itemView.setBackgroundResource(R.color.md_white_1000);
 		if (adapter.getLastOpened() != null)
@@ -111,10 +111,10 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 	@Override
     public void close(){
 		Utils.hideSoftKeyboard(itemView);
-		leftButton.setImageResource(R.drawable.folder);
+		leftButton.setImageResource(R.drawable.finfo);
 		folderName.setText(folder.getName());
 		folderName.clearFocus();
-		rightButton.setImageResource(R.drawable.ic_mode_edit_white_24dp);
+		rightButton.setImageResource(R.drawable.newedd);
 		itemView.setBackgroundResource(0);
 		if (adapter.getLastOpened() == this) adapter.setLastOpened(null);
 	}
@@ -129,7 +129,7 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 	}
 
 	private void delete(int id){
-	/*	new AlertDialog.Builder(itemView.getContext(),R.style.DialogTheme)
+	new AlertDialog.Builder(itemView.getContext(),R.style.DialogTheme)
 				.setCancelable(true)
 				.setTitle("Delete folder?")
 				.setMessage("Folder '" + folder.getName() + "' will be deleted however notes in this folder will remain safe")
@@ -147,10 +147,10 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 						dialog.dismiss();
 					}
 				})
-				.show();*/
+				.show();
 
 
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(itemView.getContext());
+		/*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(itemView.getContext());
 		alertDialogBuilder.setTitle("Are you Sure to Delete");
 		alertDialogBuilder.setCancelable(true);
 
@@ -175,7 +175,7 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 
 
 		AlertDialog mAlertDialog = alertDialogBuilder.create();
-		mAlertDialog.show();
+		mAlertDialog.show();*/
 	}
 
 
