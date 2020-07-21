@@ -82,8 +82,6 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 		}
 	}
 
-
-
 	@OnClick(R.id.right_button) void clickRightButton(View view){
 		if (isOpen()){
 			apply();
@@ -95,7 +93,6 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 
 	@Override
     public void open(){
-		//leftButton.setImageResource(R.drawable.ic_delete_white_24dp);
 		rightButton.setImageResource(R.drawable.ic_done_white_24dp);
 		itemView.setBackgroundResource(R.color.md_white_1000);
 		if (adapter.getLastOpened() != null)
@@ -128,56 +125,29 @@ class EditFolderViewHolder extends RecyclerView.ViewHolder implements OpenClosea
 		folder.save();
 	}
 
-	private void delete(int id){
-	new AlertDialog.Builder(itemView.getContext(),R.style.DialogTheme)
+	private void delete(int id) {
+		new AlertDialog.Builder(itemView.getContext(), R.style.DialogTheme)
 				.setCancelable(true)
 				.setTitle("Delete folder?")
 				.setMessage("Folder '" + folder.getName() + "' will be deleted however notes in this folder will remain safe")
-				.setPositiveButton("Delete Folder", new DialogInterface.OnClickListener(){
+				.setPositiveButton("Delete Folder", new DialogInterface.OnClickListener() {
 					@Override
-                    public void onClick(DialogInterface dialog, int which){
+					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						folder.delete();
 						EventBus.getDefault().post(new FolderDeletedEvent(folder));
 					}
 				})
-				.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+				.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 					@Override
-                    public void onClick(DialogInterface dialog, int which){
+					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 					}
 				})
 				.show();
 
 
-		/*AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(itemView.getContext());
-		alertDialogBuilder.setTitle("Are you Sure to Delete");
-		alertDialogBuilder.setCancelable(true);
-
-		alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-				dialogInterface.dismiss();
-			}
-		});
-
-		alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-
-				dialogInterface.dismiss();
-			//	SQLite.delete().from(Folder.class).where(Folder_Table.id.is(id).execute());
-
-				EventBus.getDefault().post(new FolderDeletedEvent(folder));
-
-			}
-		});
-
-
-		AlertDialog mAlertDialog = alertDialogBuilder.create();
-		mAlertDialog.show();*/
 	}
-
 
 
 	public void setFolder(Folder folder){

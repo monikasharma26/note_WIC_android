@@ -36,11 +36,11 @@ import note.wic.FinalProject.model.Folder;
 
 public class DashBoardActivity extends AppCompatActivity{
     private static final String TAG = "HomeActivity";
-    private static final int ALL_NOTES_MENU_ID = -1;
-    private static final int EDIT_FOLDERS_MENU_ID = -2;
-    private static final int SAVE_DATABASE_MENU_ID = -3;
-    private static final int IMPORT_DATABASE_MENU_ID = -4;
-    private static final int DATABASE_MENU_ID = -5;
+    private static final int ALL_NOTES_MENU_ID = 1;
+    private static final int EDIT_FOLDERS_MENU_ID = 2;
+    private static final int SAVE_DATABASE_MENU_ID = 3;
+    private static final int IMPORT_DATABASE_MENU_ID = 4;
+    private static final int DATABASE_MENU_ID = 5;
 
     @BindView(R.id.navigation_view) NavigationView mNavigationView;
     @BindView(R.id.drawer_layout)
@@ -62,7 +62,6 @@ public class DashBoardActivity extends AppCompatActivity{
         if (getIntent().getData() != null) backupRestoreDelegate.handleFilePickedWithIntentFilter(getIntent().getData());
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener(){
             @Override public boolean onNavigationItemSelected(MenuItem item){
-                Log.e(TAG, "onNavigationItemSelected() called with: " + "item id = [" + item.getItemId() + "]");
                 int menuId = item.getItemId();
                 if (menuId == ALL_NOTES_MENU_ID){
                     setFragment(null);
@@ -84,19 +83,12 @@ public class DashBoardActivity extends AppCompatActivity{
 
     @Override protected void onStart(){
         super.onStart();
-        //inflateNavigationMenus(ALL_NOTES_MENU_ID);
         inflateNavigationMenus(DATABASE_MENU_ID);
     }
 
     public void inflateNavigationMenus(int checkedItemId){
         Menu menu = mNavigationView.getMenu();
         menu.clear();
-
-
-        menu
-                .add(Menu.NONE, DATABASE_MENU_ID, Menu.NONE, "DashBoard")
-                .setIcon(R.drawable.ic_note_white_24dp)
-                .setChecked(checkedItemId == DATABASE_MENU_ID);
 
 
         final SubMenu subMenu = menu.addSubMenu("Folders");
@@ -109,11 +101,11 @@ public class DashBoardActivity extends AppCompatActivity{
         for (Folder folder : latestFolders){
             subMenu
                     .add(Menu.NONE, folder.getId(), Menu.NONE, folder.getName())
-                    .setIcon(R.drawable.ic_folder_black_24dp)
+                    .setIcon(R.drawable.folder)
                     .setChecked(folder.getId() == checkedItemId);
         }
         menu
-                .add(Menu.NONE, EDIT_FOLDERS_MENU_ID, Menu.NONE, "Create or edit folders")
+                .add(Menu.NONE, EDIT_FOLDERS_MENU_ID, Menu.NONE, "Create or Edit folders")
                 .setIcon(R.drawable.ic_add_white_24dp);
         SubMenu backupSubMenu = menu.addSubMenu("Backup and restore");
         backupSubMenu
@@ -133,7 +125,6 @@ public class DashBoardActivity extends AppCompatActivity{
     }
 
     public void setFragment(Folder folder){
-        // Create a new fragment and specify the fragment to show based on nav item clicked
         Fragment fragment = new NoteListFragment();
         if (folder != null){
             Bundle bundle = new Bundle();

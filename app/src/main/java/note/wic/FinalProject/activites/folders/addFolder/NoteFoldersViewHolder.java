@@ -16,15 +16,15 @@ import note.wic.FinalProject.model.Folder;
 import note.wic.FinalProject.model.Note;
 
 
-class SelectFolderViewHolder extends RecyclerView.ViewHolder{
-	private static final String TAG = "SelectFolderViewHolder";
+class NoteFoldersViewHolder extends RecyclerView.ViewHolder{
+	private static final String TAG = "Folder";
 	private final Adapter adapter;
 	@BindView(R.id.checkbox) CheckBox checkBox;
 	@BindView(R.id.folder_name_text) TextView folderName;
 	private Folder folder;
 	private Note note;
 
-	public SelectFolderViewHolder(final View itemView, final Adapter adapter){
+	public NoteFoldersViewHolder(final View itemView, final Adapter adapter){
 		super(itemView);
 		ButterKnife.bind(this, itemView);
 		this.adapter = adapter;
@@ -37,12 +37,11 @@ class SelectFolderViewHolder extends RecyclerView.ViewHolder{
 			@Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
 				if (isChecked){
 					adapter.getCheckedFolders().add(folder);
-					FolderNoteDAO.createFolderNoteRelation(folder, note);
+					FolderNoteDAO.fnRelation(folder, note);
 				}else{
 					adapter.getCheckedFolders().remove(folder);
-					FolderNoteDAO.removeFolderNoteRelation(folder, note);
+					FolderNoteDAO.fnRemoveRelation(folder, note);
 				}
-				Log.e(TAG, "onClick: checkedFolders:" + adapter.getCheckedFolders());
 			}
 		});
 	}

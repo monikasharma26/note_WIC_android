@@ -1,6 +1,5 @@
-package note.wic.FinalProject.activites.audio.splash;
+package note.wic.FinalProject.activites.splash;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -23,9 +22,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        ActionBar bar = getSupportActionBar();
-
-        bar.hide();
         imageView = findViewById(R.id.imgLogo);
         splashtxtName = findViewById(R.id.splashtxtName);
         Animation animation = AnimationUtils.loadAnimation(SplashActivity.this,R.anim.splash_animation);

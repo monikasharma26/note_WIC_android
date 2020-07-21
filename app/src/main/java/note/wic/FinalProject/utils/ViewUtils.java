@@ -17,13 +17,6 @@ import note.wic.FinalProject.App;
 
 
 public class ViewUtils {
-	public static View getEmptyView(Context context, int width, int height, @ColorRes int backgroundColor){
-		View view = new View(context);
-		AbsListView.LayoutParams params = new AbsListView.LayoutParams(width, height);
-		view.setLayoutParams(params);
-		view.setBackgroundResource(backgroundColor);
-		return view;
-	}
 
 	public static void tintMenu(Menu menu, @IdRes int menuId, @ColorRes int colorRes){
 		Drawable drawable = menu.findItem(menuId).getIcon();

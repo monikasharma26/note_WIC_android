@@ -29,7 +29,6 @@ import note.wic.FinalProject.utils.Utils;
 
 public class NoteCardView extends CardView{
 
-	private static final String TAG = "NoteCardView";
 	@BindView(R.id.title) TextView title;
 	@BindView(R.id.body) TextView body;
 	@BindView(R.id.drawing_image) ImageView drawingImage;
@@ -60,28 +59,31 @@ public class NoteCardView extends CardView{
 		return note;
 	}
 
-	public void bindModel(Note note){
-		boolean isTitleEmpty = TextUtils.isEmpty(note.getTitle());
-		boolean isBodyEmpty = TextUtils.isEmpty(note.getSpannedBody());
-		title.setText(note.getTitle());
-		body.setText(note.getSpannedBody());
-		title.setVisibility(isTitleEmpty ? GONE : VISIBLE);
-		body.setVisibility(isBodyEmpty ? GONE : VISIBLE);
+	public void bindModel(Note note) {
+		if (note.getTitle() != "" && note.getTitle() != null) {
+			boolean isTitleEmpty = TextUtils.isEmpty(note.getTitle());
+			boolean isBodyEmpty = TextUtils.isEmpty(note.getSpannedBody());
+			title.setText(note.getTitle());
+			body.setText(note.getSpannedBody());
+			title.setVisibility(isTitleEmpty ? GONE : VISIBLE);
+			body.setVisibility(isBodyEmpty ? GONE : VISIBLE);
 
-		List<Folder> folders = FolderNoteDAO.getFolders(note.getId());
-		HashtagView.DataTransform<Folder> dt = new HashtagView.DataTransform<Folder>(){
-			@Override public CharSequence prepare(Folder item){
-				return item.getName();
+			List<Folder> folders = FolderNoteDAO.getFolders(note.getId());
+			HashtagView.DataTransform<Folder> dt = new HashtagView.DataTransform<Folder>() {
+				@Override
+				public CharSequence prepare(Folder item) {
+					return item.getName();
+				}
+			};
+			foldersTagView.setData(folders, dt);
+			if (note.getDrawingTrimmed() == null)
+				drawingImage.setVisibility(View.GONE);
+			else {
+				drawingImage.setVisibility(View.VISIBLE);
+				Bitmap imageBitMap = Utils.getImage(note.getDrawingTrimmed().getBlob());
+				drawingImage.setImageBitmap(imageBitMap);
 			}
-		};
-		foldersTagView.setData(folders, dt);
-		if (note.getDrawingTrimmed() == null)
-			drawingImage.setVisibility(View.GONE);
-		else{
-			drawingImage.setVisibility(View.VISIBLE);
-			Bitmap imageBitMap = Utils.getImage(note.getDrawingTrimmed().getBlob());
-			drawingImage.setImageBitmap(imageBitMap);
+			this.note = note;
 		}
-		this.note = note;
 	}
 }

@@ -124,13 +124,6 @@ public class RichEditWidgetView extends HorizontalScrollView{
 	private int lastSelectionEnd = -1;
 	private List<Effect<?>> lastSelectionEffects;
 
-	public void setRichEditView(RichEditText richEditText){
-		this.richEditText = richEditText;
-		richEditText.setOnFocusChangeListener(onFocusChangeListener);
-		richEditText.setOnSelectionChangedListener(selectionListener);
-		richEditText.setOnTouchListener(onTouchListener);
-	}
-
 	private ImageButton getEffectAction(Effect effect){
 		int index = -1;
 		for (int i = 0; i < supportedEffects.length; i++){

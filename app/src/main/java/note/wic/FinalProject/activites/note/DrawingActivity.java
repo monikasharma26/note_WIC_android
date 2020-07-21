@@ -25,7 +25,7 @@ import se.emilsjolander.intentbuilder.IntentBuilder;
 
 @IntentBuilder
 public class DrawingActivity extends AppCompatActivity {
-	private static final String TAG = "DrawingActivity";
+	private static final String TAG = "Draw";
 	@Extra
 	Integer noteId;
 	Note note;
@@ -42,14 +42,13 @@ public class DrawingActivity extends AppCompatActivity {
 		DrawingActivityIntentBuilder.inject(getIntent(), this);
 		ButterKnife.bind(this);
 		setSupportActionBar(mToolbar);
-		mToolbar.setNavigationIcon(ViewUtils.tintDrawable(R.drawable.ic_arrow_back_white_24dp, R.color.md_blue_grey_400));
+		mToolbar.setNavigationIcon(ViewUtils.tintDrawable(R.drawable.ic_arrow_back_white_24dp, R.color.white));
 		mToolbar.setNavigationOnClickListener(new View.OnClickListener(){
 			@Override public void onClick(View v){
 				onBackPressed();
 			}
 		});
 		note = NotesDAO.getNote(noteId);
-		Log.e(TAG, "onCreate: noteId= " + noteId + ", note= " + note);
 		drawingPad.setOnSignedListener(new SignaturePad.OnSignedListener(){
 			@Override public void onStartSigning(){
 			}
@@ -74,7 +73,6 @@ public class DrawingActivity extends AppCompatActivity {
 		try{
 			drawingPad.setSignatureBitmap(Utils.getImage(note.getDrawing().getBlob()));
 		}catch (NullPointerException e){
-			Log.i(TAG, "Empty Drawing onStart: ", e);
 		}
 	}
 }

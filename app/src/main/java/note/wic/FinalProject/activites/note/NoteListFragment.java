@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -27,7 +28,7 @@ import note.wic.FinalProject.model.Folder;
 import note.wic.FinalProject.utils.ShadowLayout;
 
 
-public class NoteListFragment extends Fragment {
+public class NoteListFragment extends Fragment  {
     public static final String FOLDER = "FOLDER";
 
     @BindView(R.id.toolbar)
@@ -67,7 +68,7 @@ public class NoteListFragment extends Fragment {
     TextView noEventTv;
     @BindView(R.id.can_add_event_tv)
     TextView canAddEventTv;
-
+    private int clickCount = 0;
     @Nullable
     @Override
     public View onCreateView(
@@ -91,12 +92,29 @@ public class NoteListFragment extends Fragment {
                 ((DashBoardActivity) getActivity()).mDrawerLayout.openDrawer(Gravity.LEFT);
             }
         });
+
         StaggeredGridLayoutManager slm = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         slm.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS);
         mRecyclerView.setLayoutManager(slm);
         adapter = new NoteAdapter(zeroNotesView, folder);
         mRecyclerView.setAdapter(adapter);
         adapter.loadFromDatabase();
+
+        etSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                String s = newText;
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+
     }
 
     @OnClick(R.id.add_event_iv)
@@ -110,10 +128,47 @@ public class NoteListFragment extends Fragment {
         super.onStart();
         adapter.registerEventBus();
     }
+    @OnClick(R.id.spinner_sl)
+    public void onViewClicked() {
 
+        clickCount++;
+        if (clickCount == 0) {
+            setupOrderByDate();
+        } else if (clickCount == 1) {
+            setupOrderByTitle();
+        } else if (clickCount == 2) {
+            setupOrderByDesc();
+            clickCount = -1;
+
+        }
+    }
     @Override
     public void onStop() {
         super.onStop();
         adapter.unregisterEventBus();
     }
+
+    private void setupOrderByDesc() {
+        spinnerParentRl1.setBackgroundResource(R.drawable.custom_daily_view_background);
+        spinnerSl.setShadowColor(getResources().getColor(R.color.daily_view_shadow));
+        mdwViewTv.setText("BY DESC");
+        adapter.getByDesc();
+
+    }
+
+    private void setupOrderByTitle() {
+        spinnerParentRl1.setBackgroundResource(R.drawable.custom_daily_view_background);
+        spinnerSl.setShadowColor(getResources().getColor(R.color.daily_view_shadow));
+        mdwViewTv.setText("BY TITLE");
+        adapter.getByTitle();
+    }
+
+    private void setupOrderByDate() {
+        spinnerParentRl1.setBackgroundResource(R.drawable.custom_daily_view_background);
+        spinnerSl.setShadowColor(getResources().getColor(R.color.daily_view_shadow));
+        mdwViewTv.setText("BY DATE");
+        adapter.getByDate();
+    }
+
+
 }

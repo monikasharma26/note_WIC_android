@@ -22,9 +22,9 @@ import se.emilsjolander.intentbuilder.IntentBuilder;
 
 
 @IntentBuilder
-public class AddToFoldersActivity extends AppCompatActivity {
+public class NoteFoldersActivity extends AppCompatActivity {
 	
-	private static final String TAG = "AddToFoldersActivity";
+	private static final String TAG = "Add Note";
 
 	@BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -35,7 +35,7 @@ public class AddToFoldersActivity extends AppCompatActivity {
 	@Override protected void onCreate(@Nullable Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_list_of_folders);
-		AddToFoldersActivityIntentBuilder.inject(getIntent(), this);
+		NoteFoldersActivityIntentBuilder.inject(getIntent(), this);
 		ButterKnife.bind(this);
 		setSupportActionBar(mToolbar);
 		mToolbar.setTitle("Add to folders");

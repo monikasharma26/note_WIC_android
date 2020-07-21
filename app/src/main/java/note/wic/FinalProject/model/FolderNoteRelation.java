@@ -12,8 +12,6 @@ import note.wic.FinalProject.database.AppDatabase;
 
 @Table(database = AppDatabase.class, allFields = true)
 public class FolderNoteRelation extends BaseModel {
-    private static final String TAG = "FolderNoteRelation";
-
     @PrimaryKey
     @ForeignKey(onDelete = ForeignKeyAction.CASCADE)
     private Folder folder;

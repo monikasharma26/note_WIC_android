@@ -35,14 +35,8 @@ public class HomeFragment extends Fragment {
     ImageView img1;
     @BindView(R.id.textdateandtime)
     TextView textdateandtime;
-    @BindView(R.id.txt_noe_ed)
-    TextView txtNoeEd;
-    @BindView(R.id.alert_img)
-    ImageView alertImg;
-    @BindView(R.id.txt_nov_ed)
-    TextView txtNovEd;
-    @BindView(R.id.ll_dashtotal)
-    LinearLayout llDashtotal;
+
+
 
 
     @Nullable
@@ -68,13 +62,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void init(View view) {
-        txtNovEd  = view.findViewById(R.id.txt_nov_ed);
-        txtNoeEd  =view.findViewById( R.id.txt_noe_ed);
         textdateandtime =view.findViewById(R.id.textdateandtime);
         img1=view.findViewById(R.id.img1);
         Calendar c = Calendar.getInstance();
         AnimationDrawable animation = new AnimationDrawable();
-        //animation.addFrame(getResources().getDrawable(R.drawable.img3), 1000);
+        animation.addFrame(getResources().getDrawable(R.drawable.lll), 1000);
         //animation.addFrame(getResources().getDrawable(R.drawable.img4), 2000);
         //animation.addFrame(getResources().getDrawable(R.drawable.mainimg), 3000);
         animation.setOneShot(false);

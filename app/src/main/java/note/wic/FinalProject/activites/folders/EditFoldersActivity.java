@@ -18,7 +18,7 @@ import se.emilsjolander.intentbuilder.IntentBuilder;
 
 @IntentBuilder
 public class EditFoldersActivity extends AppCompatActivity {
-	private static final String TAG = "EditFoldersActivity";
+	private static final String TAG = "Edit Folder";
 
 	@BindView(R.id.toolbar)
     Toolbar mToolbar;

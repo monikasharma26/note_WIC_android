@@ -1,8 +1,10 @@
 package note.wic.FinalProject.model;
 
 
+import android.graphics.Bitmap;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
 
 import com.commonsware.cwac.richtextutils.SpannableStringGenerator;
 import com.commonsware.cwac.richtextutils.SpannedXhtmlGenerator;
@@ -14,6 +16,8 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -184,4 +188,25 @@ public class Note extends BaseModel {
                 ", title='" + title + '\'' +
                 "} " + super.toString();
     }
+
+    public static Comparator<Note> StuTitleComparator = new Comparator<Note>() {
+        public int compare(Note s1, Note s2) {
+            String noteTitle1 = s1.getTitle().toUpperCase();
+            String noteTitle2 = s2.getTitle().toUpperCase();
+            Log.d("sad","adad"+noteTitle1);
+            return noteTitle1.compareTo(noteTitle2);
+
+
+        }};
+    public static Comparator<Note> descCo = new Comparator<Note>() {
+        public int compare(Note s1, Note s2) {
+            String noteTitle1 = s1.getBody().toUpperCase();
+            String noteTitle2 = s2.getBody().toUpperCase();
+            return noteTitle1.compareTo(noteTitle2);
+        }};
+    public static Comparator<Note> dateComparator = new Comparator<Note>() {
+            public int compare(Note o1, Note o2) {
+                return o1.getCreatedAt().compareTo(o2.getCreatedAt());
+            }
+        };
 }

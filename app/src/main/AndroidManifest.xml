@@ -28,8 +28,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
-        <activity android:name=".activites.audio.splash.SplashActivity">
+        <activity android:name=".activites.splash.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".activites.audio.AudioActivity" />
         <activity
@@ -37,7 +41,7 @@
             android:label="Drawing Activity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activites.folders.addFolder.AddToFoldersActivity"
+            android:name=".activites.folders.addFolder.NoteFoldersActivity"
             android:label="Add Folders" />
         <activity
             android:name=".activites.note.NoteActivity"
@@ -46,11 +50,7 @@
             android:name=".activites.folders.EditFoldersActivity"
             android:label="Edit Folders" />
         <activity android:name=".activites.dashboard.DashBoardActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

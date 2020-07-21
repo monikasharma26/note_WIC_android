@@ -1,20 +1,38 @@
 package note.wic.FinalProject.activites.note;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,15 +67,23 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import note.wic.FinalProject.MapsActivity;
 import note.wic.FinalProject.R;
-import note.wic.FinalProject.activites.folders.addFolder.AddToFoldersActivityIntentBuilder;
+import note.wic.FinalProject.activites.audio.AudioActivity;
+import note.wic.FinalProject.activites.folders.addFolder.NoteFoldersActivityIntentBuilder;
 import note.wic.FinalProject.database.FolderNoteDAO;
 import note.wic.FinalProject.database.NotesDAO;
 import note.wic.FinalProject.events.NoteDeletedEvent;
@@ -66,6 +92,8 @@ import note.wic.FinalProject.events.NoteFoldersUpdatedEvent;
 import note.wic.FinalProject.model.Folder;
 import note.wic.FinalProject.model.Note;
 import note.wic.FinalProject.model.Note_Table;
+import note.wic.FinalProject.utils.CompressImage;
+import note.wic.FinalProject.utils.ImagePicker;
 import note.wic.FinalProject.utils.ShadowLayout;
 import note.wic.FinalProject.utils.TimeUtils;
 import note.wic.FinalProject.utils.Utils;
@@ -91,14 +119,12 @@ public class NoteActivity extends AppCompatActivity {
 
     @BindView(R.id.img_note)
     ImageView imgNote;
-    @BindView(R.id.cross_image)
-    ImageView crossImage;
+
     @BindView(R.id.img_card)
     CardView imgCard;
-    @BindView(R.id.cross_music)
-    ImageView crossMusic;
+
     @BindView(R.id.txt_upload_audio_ha)
-    TextView txtUploadAudioHa;
+    TextView txtUploadAudio;
     @BindView(R.id.music_card)
     CardView musicCard;
     @BindView(R.id.save_tv)
@@ -107,7 +133,7 @@ public class NoteActivity extends AppCompatActivity {
     ShadowLayout saveSl;
     @BindView(R.id.saveNote)
     Button saveNote;
-
+    ArrayList<String> myImagesUrl = new ArrayList<String>();
     @BindView(R.id.btnMap)
     FloatingActionButton btnMap;
     @BindView(R.id.btn)
@@ -119,6 +145,7 @@ public class NoteActivity extends AppCompatActivity {
     @BindView(R.id.edit_folders_button)
     ImageButton editFoldersButton;
 
+    private int GALLERY = 1, CAMERA = 2;
     @BindView(R.id.folders_tag_view)
     HashtagView foldersTagView;
     @BindView(R.id.drawing_image)
@@ -129,6 +156,9 @@ public class NoteActivity extends AppCompatActivity {
     RichEditText body;
     @BindView(R.id.ss)
     FrameLayout ss;
+    private double startTime = 0;
+    private double finalTime = 0;
+    public static int oneTimeOnly = 0;
     RichEditWidgetView richEditWidgetView;
     @BindView(R.id.rich_edit_widget)
     RichEditWidgetView richEditWidget;
@@ -140,9 +170,23 @@ public class NoteActivity extends AppCompatActivity {
     private Boolean mLocationPermissionsGranted = false;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     LatLng recentLatLng = null;
-
+    private static final String IMAGE_DIRECTORY = "/note";
     double latitude;
     double longitude;
+    Uri mediaUri;
+    File photoFile;
+    boolean audio = false;
+    boolean image = false;
+    boolean update = false;
+    String realPth = "";
+    Uri imageUri = null;
+    String compressed_real_path = "";
+    String audioUrl;
+    ArrayList<Bitmap> mImgIds = new ArrayList<Bitmap>();
+    CompressImage compressImage;
+    String AudioSavePathInDevice = "";
+    MediaRecorder mediaRecorder;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -172,10 +216,8 @@ public class NoteActivity extends AppCompatActivity {
             note.setCreatedAt(now);
             note.save();
             noteId = note.getId();
-            recentLatLng = new LatLng(note.getLatitude(),note.getLongitude());
-        }
-        else
-        {
+            recentLatLng = new LatLng(note.getLatitude(), note.getLongitude());
+        } else {
             mToolbar.setTitle("Edit Note");
         }
         //  richEditWidgetView.setRichEditView(body);
@@ -188,6 +230,8 @@ public class NoteActivity extends AppCompatActivity {
                 Toast.makeText(NoteActivity.this, "Folder Clicked", Toast.LENGTH_SHORT).show();
             }
         });
+
+        compressImage = new CompressImage(NoteActivity.this);
     }
 
     private void bind() {
@@ -198,6 +242,7 @@ public class NoteActivity extends AppCompatActivity {
         if (note.getBody() != null) {
             body.setText(note.getSpannedBody());
         }
+
         foldersTagView.setData(FolderNoteDAO.getFolders(note.getId()), new HashtagView.DataTransform<Folder>() {
             @Override
             public CharSequence prepare(Folder item) {
@@ -205,14 +250,26 @@ public class NoteActivity extends AppCompatActivity {
             }
         });
         recentLatLng = new LatLng(note.getLatitude(), note.getLongitude());
+        if (note.getImage1() != null ) {
+
+            File imgFile = new File("" + note.getImage1());
+
+            if (imgFile.exists()) {
+                imgCard.setVisibility(View.VISIBLE);
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                imgNote.setImageBitmap(myBitmap);
+            }
+        }
         if (note.getDrawingTrimmed() == null)
             drawingImage.setVisibility(View.GONE);
         else {
             drawingImage.setVisibility(View.VISIBLE);
-            drawingImage.setImageBitmap(Utils.getImage(note.getDrawingTrimmed().getBlob()));
+           // drawingImage.setImageBitmap(note.getImage1());
+             drawingImage.setImageBitmap(Utils.getImage(note.getDrawingTrimmed().getBlob()));
         }
         createTimeText.setText("Created " + TimeUtils.getHumanReadableTimeDiff(note.getCreatedAt()));
     }
+
     private void requestMultiplePermissions() {
         Dexter.withActivity(this).withPermissions(
                 Manifest.permission.CAMERA,
@@ -261,6 +318,33 @@ public class NoteActivity extends AppCompatActivity {
                     permissions,
                     LOCATION_PERMISSION_REQUEST_CODE);
         }
+    }
+
+    public String saveImage(Bitmap myBitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        myBitmap.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+        File wallpaperDirectory = new File(
+                Environment.getExternalStorageDirectory() + IMAGE_DIRECTORY);
+        if (!wallpaperDirectory.exists()) {
+            wallpaperDirectory.mkdirs();
+        }
+
+        try {
+            File f = new File(wallpaperDirectory, Calendar.getInstance()
+                    .getTimeInMillis() + ".jpg");
+            f.createNewFile();
+            FileOutputStream fo = new FileOutputStream(f);
+            fo.write(bytes.toByteArray());
+            MediaScannerConnection.scanFile(this,
+                    new String[]{f.getPath()},
+                    new String[]{"image/jpeg"}, null);
+            fo.close();
+
+            return f.getAbsolutePath();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return "";
     }
 
     @Override
@@ -327,12 +411,12 @@ public class NoteActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.note_menu, menu);
         MenuItem shareItem = menu.findItem(R.id.delete_note);
-        Log.d("ss","idis"+noteId);
-        if(mToolbar.getTitle() == "Edit Note"){
-                shareItem.setVisible(true);
-                ViewUtils.tintMenu(menu, R.id.delete_note, R.color.white);
+        Log.d("ss", "idis" + noteId);
+        if (mToolbar.getTitle() == "Edit Note") {
+            shareItem.setVisible(true);
+            ViewUtils.tintMenu(menu, R.id.delete_note, R.color.white);
 
-            }
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -354,14 +438,13 @@ public class NoteActivity extends AppCompatActivity {
 
     @OnClick(R.id.edit_folders_button)
     void clickEditFoldersButton() {
-        Intent intent = new AddToFoldersActivityIntentBuilder(note.getId()).build(this);
+        Intent intent = new NoteFoldersActivityIntentBuilder(note.getId()).build(this);
         startActivity(intent);
     }
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNoteEditedEvent(NoteEditedEvent noteEditedEvent) {
-        Log.e(TAG, "onNoteEditedEvent() called with: " + "noteEditedEvent = [" + noteEditedEvent + "]");
         if (note.getId() == noteEditedEvent.getNote().getId()) {
             bind();
 
@@ -399,9 +482,46 @@ public class NoteActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void audioButtonClick(View view) {
+        Intent intent = new Intent(NoteActivity.this, AudioActivity.class);
+//        intent.putExtra("Latlng", recentLatLng);
+        startActivity(intent);
+    }
+
+
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == this.RESULT_CANCELED) {
+            return;
+        }
+        if (requestCode == GALLERY) {
+
+            if (data != null) {
+                imageUri = data.getData();
+                realPth = getPathFromURI(imageUri);
+                imgNote.setImageURI(imageUri);
+                compressed_real_path = compressImage.compressImage(realPth);
+                image = true;
+                imgNote.setVisibility(View.VISIBLE);
+                imgCard.setVisibility(View.VISIBLE);
+
+            } else if (requestCode == CAMERA) {
+                realPth = photoFile.getPath();
+                imageUri = Uri.parse(realPth);
+                compressed_real_path = compressImage.compressImage(realPth);
+                imgNote.setImageURI(imageUri);
+                image = true;
+                imgNote.setVisibility(View.VISIBLE);
+                imgCard.setVisibility(View.VISIBLE);
+
+            }
+        }
+    }
+
+
     @OnClick(R.id.save_tv)
     public void onViewClicked() {
-        Log.d("aa","ssd");
+        Log.d("aa", "ssd");
         assert note != null;
         if (shouldFireDeleteEvent) {
             EventBus.getDefault().postSticky(new NoteDeletedEvent(note));
@@ -416,6 +536,7 @@ public class NoteActivity extends AppCompatActivity {
             note.setTitle(processedTitle);
             note.setLatitude(latitude);
             note.setLongitude(longitude);
+            note.setImage1(compressed_real_path);
             note.save();
             EventBus.getDefault().postSticky(new NoteEditedEvent(note.getId()));
 
@@ -423,4 +544,58 @@ public class NoteActivity extends AppCompatActivity {
         finish();
 
     }
+
+
+    public Bitmap returnImageBitmap(String imgURL) {
+        File imgFile = new File(imgURL);
+        Bitmap myBitmap = null;
+
+        if (imgFile.exists()) {
+            myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+        }
+        return myBitmap;
+    }
+
+
+    private void appendImgData(Bitmap img) {
+        mImgIds.add(img);
+    }
+
+    public void cameraButtonClick(View view) {
+        try {
+            takePhotoFromCamera();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void galleryButtonClick(View view) {
+        choosePhotoFromGallary();
+    }
+
+    void choosePhotoFromGallary() {
+        Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        startActivityForResult(galleryIntent, GALLERY);
+    }
+
+    public void takePhotoFromCamera() throws IOException {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA);
+    }
+
+    public String getPathFromURI(Uri contentUri) {
+        String path = null;
+        String[] proj = {MediaStore.MediaColumns.DATA};
+        Cursor cursor = NoteActivity.this.getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor.moveToFirst()) {
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+            path = cursor.getString(column_index);
+        }
+        cursor.close();
+        return path;
+    }
+
+
 }

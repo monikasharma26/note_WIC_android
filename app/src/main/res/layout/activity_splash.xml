@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAccent"
-    android:backgroundTint="@color/colorPrimary"
-    tools:context=".activites.audio.splash.SplashActivity">
+    android:background="@color/whiteLight"
+    android:backgroundTint="@color/whiteLight"
+    tools:context=".activites.splash.SplashActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -23,7 +23,7 @@
             android:id="@+id/frameLayout2"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@drawable/blue_bg_180degree">
+            android:background="@drawable/background_shadow">
 
 
         </FrameLayout>
@@ -32,7 +32,7 @@
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@drawable/blue_bg">
+            android:background="@drawable/background_shadow">
 
 
         </FrameLayout>
@@ -49,7 +49,7 @@
         android:gravity="center"
         android:text="WIC Notes"
         android:textAlignment="center"
-        android:textColor="@color/login_bk_color"
+        android:textColor="@color/colorPrimary"
         android:textColorHighlight="@color/login_bk_color"
         android:textColorHint="@color/login_bk_color"
         android:textColorLink="@color/login_bk_color"
@@ -68,8 +68,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher" />
-
+        app:srcCompat="@drawable/ssl" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,9 +8,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import note.wic.FinalProject.model.Folder;
+
 import note.wic.FinalProject.model.FolderNoteRelation;
-
-
 import note.wic.FinalProject.model.FolderNoteRelation_Table;
 import note.wic.FinalProject.model.Note;
 
@@ -49,7 +48,7 @@ public class FolderNoteDAO {
         return notes;
     }
 
-    public static void removeFolderNoteRelation(Folder folder, Note note){
+    public static void fnRemoveRelation(Folder folder, Note note){
         SQLite
                 .delete()
                 .from(FolderNoteRelation.class)
@@ -57,7 +56,7 @@ public class FolderNoteDAO {
                 .execute();
     }
 
-    public static void createFolderNoteRelation(Folder folder, Note note){
+    public static void fnRelation(Folder folder, Note note){
         FolderNoteRelation fnr = new FolderNoteRelation();
         fnr.setFolder(folder);
         fnr.setNote(note);

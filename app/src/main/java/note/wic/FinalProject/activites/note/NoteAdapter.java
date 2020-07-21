@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,7 +13,11 @@ import com.google.android.material.snackbar.Snackbar;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import note.wic.FinalProject.database.NotesDAO;
 import note.wic.FinalProject.events.NoteDeletedEvent;
@@ -26,6 +31,8 @@ public class NoteAdapter extends RecyclerView.Adapter{
 
     private static final String TAG = "Adapter";
     private final Folder folder;
+    String data = "";
+    List<Note> notesList;
     List<Note> notes;
     View.OnClickListener noteOnClickListener = new View.OnClickListener(){
         @Override public void onClick(View v){
@@ -43,6 +50,11 @@ public class NoteAdapter extends RecyclerView.Adapter{
         this.zeroNotesView = zeroNotesView;
         this.folder = folder;
     }
+    public NoteAdapter(View zeroNotesView, Folder folder,String s){
+        this.zeroNotesView = zeroNotesView;
+        this.folder = folder;
+        this.data = s;
+    }
 
     @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = new NoteCardView(parent.getContext());
@@ -53,7 +65,6 @@ public class NoteAdapter extends RecyclerView.Adapter{
     @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position){
         if (holder.itemView instanceof NoteCardView){
             NoteCardView noteCardView = (NoteCardView) holder.itemView;
-
             noteCardView.bindModel(notes.get(position));
         }
     }
@@ -68,6 +79,7 @@ public class NoteAdapter extends RecyclerView.Adapter{
     void loadFromDatabase(){
         notes = NotesDAO.getLatestNotes(folder);
         notifyDataSetChanged();
+        notesList = new ArrayList<>(notes);
     }
 
     void registerEventBus(){
@@ -79,7 +91,6 @@ public class NoteAdapter extends RecyclerView.Adapter{
     }
 
     @Subscribe(sticky = true) public void onNoteEditedEvent(NoteEditedEvent noteEditedEvent){
-        Log.e(TAG, "onNoteEditedEvent() called with: " + "noteEditedEvent = [" + noteEditedEvent + "]");
         Note note = noteEditedEvent.getNote();
         if (notes.contains(note)){
             int index = notes.indexOf(note);
@@ -93,7 +104,6 @@ public class NoteAdapter extends RecyclerView.Adapter{
     }
 
     @Subscribe(sticky = true) public void onNoteDeletedEvent(NoteDeletedEvent noteDeletedEvent){
-        Log.e(TAG, "onNoteDeletedEvent() called with: " + "noteDeletedEvent = [" + noteDeletedEvent.getNote() + "]");
         final Note note = noteDeletedEvent.getNote();
         if (notes.contains(note)){
             int index = notes.indexOf(note);
@@ -112,5 +122,72 @@ public class NoteAdapter extends RecyclerView.Adapter{
         }
         EventBus.getDefault().removeStickyEvent(NoteDeletedEvent.class);
     }
+    public Filter getFilter() {
+        return notesFilter;
+    }
+
+
+
+    private Filter notesFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Note> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(notesList);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Note item : notesList) {
+                    if (item.getTitle().toLowerCase().contains(filterPattern) || item.getBody().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            notes.clear();
+            notes.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+
+    public  void getByTitle(){
+        if(notesList.size()!=0) {
+            Collections.sort(notes, new Comparator<Note>() {
+                public int compare(Note o1, Note o2) {
+                    return o1.getBody().compareTo(o2.getBody());
+                }
+            });
+            notifyDataSetChanged();
+        }
+    }
+
+    public  void getByDate(){
+        if(notes.size()!=0){
+            Collections.sort(notes, new Comparator<Note>() {
+                public int compare(Note o1, Note o2) {
+                    return o1.getCreatedAt().compareTo(o2.getCreatedAt());
+                }
+            });
+            notifyDataSetChanged();
+        }
+    }
+
+    public  void getByDesc(){
+        if(notes.size()!=0){
+            Collections.sort(notes, new Comparator<Note>() {
+                public int compare(Note o1, Note o2) {
+                    return o1.getBody().compareTo(o2.getBody());
+                }
+            });
+            notifyDataSetChanged();
+        }
+    }
+
+
 }
 

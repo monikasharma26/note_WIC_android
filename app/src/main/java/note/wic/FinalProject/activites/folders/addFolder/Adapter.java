@@ -43,15 +43,15 @@ class Adapter extends RecyclerView.Adapter{
 					LayoutInflater.from(parent.getContext()).inflate(R.layout.view_new_folder, parent, false));
 		}else if (viewType == VIEW_TYPE_SELECT_A_FOLDER){
 			View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_select_folder, parent, false);
-			return new SelectFolderViewHolder(view, this);
+			return new NoteFoldersViewHolder(view, this);
 		}
 		return null;
 	}
 
 	@Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position){
-		if (holder instanceof SelectFolderViewHolder){
+		if (holder instanceof NoteFoldersViewHolder){
 			position--;
-			SelectFolderViewHolder selectFolderViewHolder = (SelectFolderViewHolder) holder;
+			NoteFoldersViewHolder selectFolderViewHolder = (NoteFoldersViewHolder) holder;
 			Folder folder = folders.get(position);
 			selectFolderViewHolder.setData(folder,note);
 			selectFolderViewHolder.itemView.setTag(folder);
