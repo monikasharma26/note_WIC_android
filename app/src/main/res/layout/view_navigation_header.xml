@@ -12,7 +12,7 @@
 			android:layout_height="70dp"
 			android:layout_marginTop="25dp"
 			android:scaleType="fitCenter"
-			android:src="@drawable/ic_launcher"
+			android:src="@drawable/ssl"
 			/>
 
 	<TextView

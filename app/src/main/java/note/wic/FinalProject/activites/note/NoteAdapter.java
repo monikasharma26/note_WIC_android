@@ -1,7 +1,6 @@
 package note.wic.FinalProject.activites.note;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -17,14 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import note.wic.FinalProject.database.NotesDAO;
 import note.wic.FinalProject.events.NoteDeletedEvent;
 import note.wic.FinalProject.events.NoteEditedEvent;
 import note.wic.FinalProject.model.Folder;
 import note.wic.FinalProject.model.Note;
-import note.wic.FinalProject.utils.SimpleViewHolder;
+import note.wic.FinalProject.utils.NCViewHolder;
 import note.wic.FinalProject.view.NoteCardView;
 
 public class NoteAdapter extends RecyclerView.Adapter{
@@ -59,7 +57,7 @@ public class NoteAdapter extends RecyclerView.Adapter{
     @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = new NoteCardView(parent.getContext());
         view.setOnClickListener(noteOnClickListener);
-        return new SimpleViewHolder(view);
+        return new NCViewHolder(view);
     }
 
     @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position){

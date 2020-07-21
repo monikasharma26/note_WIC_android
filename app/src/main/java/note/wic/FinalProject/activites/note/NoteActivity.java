@@ -1,14 +1,11 @@
 package note.wic.FinalProject.activites.note;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -16,23 +13,17 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,7 +66,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,12 +83,10 @@ import note.wic.FinalProject.model.Folder;
 import note.wic.FinalProject.model.Note;
 import note.wic.FinalProject.model.Note_Table;
 import note.wic.FinalProject.utils.CompressImage;
-import note.wic.FinalProject.utils.ImagePicker;
 import note.wic.FinalProject.utils.ShadowLayout;
 import note.wic.FinalProject.utils.TimeUtils;
 import note.wic.FinalProject.utils.Utils;
 import note.wic.FinalProject.utils.ViewUtils;
-import note.wic.FinalProject.view.RichEditWidgetView;
 import se.emilsjolander.intentbuilder.Extra;
 import se.emilsjolander.intentbuilder.IntentBuilder;
 
@@ -159,9 +147,7 @@ public class NoteActivity extends AppCompatActivity {
     private double startTime = 0;
     private double finalTime = 0;
     public static int oneTimeOnly = 0;
-    RichEditWidgetView richEditWidgetView;
-    @BindView(R.id.rich_edit_widget)
-    RichEditWidgetView richEditWidget;
+
     private boolean shouldFireDeleteEvent = false;
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
